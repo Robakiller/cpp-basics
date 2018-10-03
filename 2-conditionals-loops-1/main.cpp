@@ -18,11 +18,11 @@ int main()
 
 	for (vdX_initial; vdX_initial <= vdX_final; vdX_initial += vdDX)
 	{
-		if ((vdX_initial < 0) && (vdB != 0)) //Первый случай
+		if ((vdX_initial < 0) && (vdB != 0)) 
 			cout << "\t" << vdX_initial << "\t||\t" << vdA - vdX_initial / (10 + vdB) << endl;
-		else if ((vdX_initial > 0)&&(vdB == 0)) //Второй случай
+		else if ((vdX_initial > 0)&&(vdB == 0)) 
 			cout << "\t" << vdX_initial << "\t||\t" << (vdX_initial - vdA) / (vdX_initial - vdC) << endl;
-		else //Третий случай
+		else 
 			cout << "\t" << vdX_initial << "\t||\t" << 3*vdX_initial + 2/vdC << endl;
 	}
 	cout << "--------------------------------" << endl;
