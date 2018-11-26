@@ -11,7 +11,7 @@ void fdFillTable(double, double, int);
 
 int main()
 {
-	int viN, n;
+	int viN;
 	const int cviMaxIter = 500;
 	double vdAccuracy, vdX_initial, vdX_final, vdDX;
 
@@ -25,22 +25,22 @@ int main()
 	for (double i = vdX_initial; i <= vdX_final; i += vdDX)
 	{
 		double vdCn = i, vdF = vdCn;
-		int viI = trunc(fabs(i));
+		int viI = static_cast<int>(trunc(fabs(i)));
 
-		for (n = 0; fabs(vdCn) >= vdAccuracy; n++)
+		for (viN = 0; fabs(vdCn) >= vdAccuracy; viN++)
 		{
-			if ((n >= cviMaxIter) || (viI > 1))
+			if ((viN >= cviMaxIter) || (viI > 1))
 			{
 				fvBreakRow(i);
 				break;
 			}
 
-			vdCn *= ((2 * n + 1)*pow(i, 2)) / (2 * n + 3);
+			vdCn *= ((2 * viN + 1)*pow(i, 2)) / (2 * viN + 3);
 			vdF += vdCn;
 		}
 
 		if ((viI < 1) && (fabs(fabs(i) - 1) > 1e-15))
-			fdFillTable(i, vdF, n);
+			fdFillTable(i, vdF, viN);
 	}
 
 	cout << string(39, '-') << endl;
@@ -77,7 +77,7 @@ void fvBreakRow(double i)
 	cout.width(6); cout << "|\n";
 }
 
-void fdFillTable(double i, double vdF, int n)
+void fdFillTable(double i, double vdF, int viN)
 {
 	cout << "|";
 	cout << showpos;
@@ -89,7 +89,7 @@ void fdFillTable(double i, double vdF, int n)
 	cout.width(5); cout << "||";
 	cout << noshowpos;
 	cout.precision(6);
-	cout.width(5); cout << n + 1;
+	cout.width(5); cout << viN + 1;
 	cout.width(5); cout << "|";
 
 	cout << showpos;

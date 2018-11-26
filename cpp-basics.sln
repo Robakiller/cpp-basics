@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04-functions", "04-functions\04-functions.vcxproj", "{55E0D335-5445-4FD1-B327-4BD221F3D606}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "08-structures", "08-structures\08-structures.vcxproj", "{57F1F121-5A97-49BF-9780-376F5A6FD190}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "09-multi-file-project", "09-multi-file-project\09-multi-file-project.vcxproj", "{2119A092-C8F4-4FFC-81F9-A4F520FF1AB0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "10-templates", "10-templates\10-templates.vcxproj", "{CCB413CA-4005-4580-86D4-A70232D1317B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01-linear-program", "01-linear-program\1-linear-program.vcxproj", "{875D8595-3DFA-4C9F-B96B-438DA32C769D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01-linear-program", "01-linear-program\01-linear-program.vcxproj", "{875D8595-3DFA-4C9F-B96B-438DA32C769D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02-conditionals-loops-1", "02-conditionals-loops-1\2-conditionals-loops-1.vcxproj", "{B97A13E9-2B21-42FE-851A-242946DAB7A0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "02-conditionals-loops-1", "02-conditionals-loops-1\02-conditionals-loops-1.vcxproj", "{B97A13E9-2B21-42FE-851A-242946DAB7A0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03-conditionals-loops-2", "03-conditionals-loops-2\3-conditionals-loops-2.vcxproj", "{1135741C-EB61-4277-9D23-3D6B8B99737F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "03-conditionals-loops-2", "03-conditionals-loops-2\03-conditionals-loops-2.vcxproj", "{1135741C-EB61-4277-9D23-3D6B8B99737F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05-arrays-1d", "05-arrays-1d\5-arrays-1d.vcxproj", "{3138A1F8-FA7D-4D37-AD21-D81C7E792B07}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "04-functions", "04-functions\04-functions.vcxproj", "{55E0D335-5445-4FD1-B327-4BD221F3D606}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06-arrays-2d", "06-arrays-2d\6-arrays-2d.vcxproj", "{2A68C9B1-F963-4559-856D-20BBDCFA3C3E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05-arrays-1d", "05-arrays-1d\05-arrays-1d.vcxproj", "{3138A1F8-FA7D-4D37-AD21-D81C7E792B07}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07-strings", "07-string\7-string.vcxproj", "{20825C32-B889-4410-80E1-3544BF802E57}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "06-arrays-2d", "06-arrays-2d\06-arrays-2d.vcxproj", "{2A68C9B1-F963-4559-856D-20BBDCFA3C3E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "07-strings", "07-string\07-string.vcxproj", "{20825C32-B889-4410-80E1-3544BF802E57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +31,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x64.ActiveCfg = Debug|x64
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x64.Build.0 = Debug|x64
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x86.ActiveCfg = Debug|Win32
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x86.Build.0 = Debug|Win32
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x64.ActiveCfg = Release|x64
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x64.Build.0 = Release|x64
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x86.ActiveCfg = Release|Win32
-		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x86.Build.0 = Release|Win32
 		{57F1F121-5A97-49BF-9780-376F5A6FD190}.Debug|x64.ActiveCfg = Debug|x64
 		{57F1F121-5A97-49BF-9780-376F5A6FD190}.Debug|x64.Build.0 = Debug|x64
 		{57F1F121-5A97-49BF-9780-376F5A6FD190}.Debug|x86.ActiveCfg = Debug|Win32
@@ -87,6 +79,14 @@ Global
 		{1135741C-EB61-4277-9D23-3D6B8B99737F}.Release|x64.Build.0 = Release|x64
 		{1135741C-EB61-4277-9D23-3D6B8B99737F}.Release|x86.ActiveCfg = Release|Win32
 		{1135741C-EB61-4277-9D23-3D6B8B99737F}.Release|x86.Build.0 = Release|Win32
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x64.ActiveCfg = Debug|x64
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x64.Build.0 = Debug|x64
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x86.ActiveCfg = Debug|Win32
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Debug|x86.Build.0 = Debug|Win32
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x64.ActiveCfg = Release|x64
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x64.Build.0 = Release|x64
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x86.ActiveCfg = Release|Win32
+		{55E0D335-5445-4FD1-B327-4BD221F3D606}.Release|x86.Build.0 = Release|Win32
 		{3138A1F8-FA7D-4D37-AD21-D81C7E792B07}.Debug|x64.ActiveCfg = Debug|x64
 		{3138A1F8-FA7D-4D37-AD21-D81C7E792B07}.Debug|x64.Build.0 = Debug|x64
 		{3138A1F8-FA7D-4D37-AD21-D81C7E792B07}.Debug|x86.ActiveCfg = Debug|Win32

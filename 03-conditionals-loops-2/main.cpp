@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-	int viN, n;
+	int viN;
 	const int cviMaxIter = 500;
 	double vdAccuracy, vdX_initial, vdX_final, vdDX;
 
@@ -29,11 +29,11 @@ int main()
 	for (double i = vdX_initial; i <= vdX_final ; i += vdDX)
 	{
 		double vdCn = i, vdF = vdCn;
-		int viI = trunc(fabs(i));
+		int viI = static_cast<int>(trunc(fabs(i)));
 
-		for (n = 0; fabs(vdCn) >= vdAccuracy; n++)
+		for (viN = 0; fabs(vdCn) >= vdAccuracy; viN++)
 		{
-			if ((n >= cviMaxIter)||(viI > 1))
+			if ((viN >= cviMaxIter)||(viI > 1))
 			{
 				cout << "|";
 				cout << showpos;
@@ -50,7 +50,7 @@ int main()
 				break;
 			}
 
-			vdCn *= ((2*n+1)*pow(i, 2)) / (2*n+3);
+			vdCn *= ((2*viN+1)*pow(i, 2)) / (2*viN+3);
 			vdF += vdCn;
 		}
 
@@ -66,7 +66,7 @@ int main()
 			cout.width(5); cout << "||";
 			cout << noshowpos;
 			cout.precision(6);
-			cout.width(5); cout << n+1;
+			cout.width(5); cout << viN+1;
 			cout.width(5); cout << "|";
 
 			cout << showpos;
