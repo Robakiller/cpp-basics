@@ -6,43 +6,78 @@ using namespace std;
 
 int main()
 {
-	int vdAc, vdBc, vdCc;
-	double vdA, vdB, vdC, vdX_initial, vdX_final, vdDX;
+	const double kZero = 1e-15;
 
-	cout <<"Enter the number a: "; cin >> vdA;
-	cout <<"\nEnter the number b: "; cin >> vdB;
-	cout <<"\nEnter the number c: "; cin >> vdC;
-	cout <<"\nEnter the initial number X: "; cin >> vdX_initial;
-	cout <<"\nEnter the final number X: "; cin >> vdX_final;
-	cout <<"\nEnter the step dX: "; cin >> vdDX;
-	cout <<"\n\n" << string(32, '-') << endl;
-	cout <<"\tX\t||\tF"<< endl;
-	cout << string(32, '-') << endl;
+	int ac, bc, cc;
+	double a, b, c, x_initial, x_final, dx;
 
-	vdAc = trunc(vdA);
-	vdBc = trunc(vdB);
-	vdCc = trunc(vdC);
-
-	if ((vdAc | vdBc) & vdCc == 0)
+	do
 	{
-		vdA = vdAc;
-		vdB = vdBc;
-		vdC = vdCc;
-	}
+		cout << "Please, enter the correct numbers!" << endl;
+		cout << "Enter the number a: "; cin >> a;
+		cout << "\nEnter the number b: "; cin >> b;
+		cout << "\nEnter the number c: "; cin >> c;
+		cout << "\nEnter the initial number X1: "; cin >> x_initial;
+		cout << "\nEnter the final number X2 (X2 >= X1): "; cin >> x_final;
+		cout << "\nEnter the step dX (> 0): "; cin >> dx;
+	} while ((dx <= 0) || (x_initial > x_final));
+
+	cout <<"\n\n" << string(33, '-') << endl;
+	cout <<"|\tX\t||\tF\t|" << endl;
+	cout << string(33, '-') << endl;
+
+	ac = static_cast<int>(trunc(a));
+	bc = static_cast<int>(trunc(b));
+	cc = static_cast<int>(trunc(c));
+
+	cout << fixed;
+	cout.precision(3);
+	cout << showpos;
 	
-	for (vdX_initial; vdX_initial <= vdX_final; vdX_initial += vdDX)
+	for (x_initial; x_initial <= x_final; x_initial += dx)
 	{
-		if ((vdX_initial < 0) && (vdB != 0)) 
-			cout <<"\t"<< vdX_initial <<"\t||\t"
-					<< vdA - vdX_initial / (10 + vdB) << endl;
-		else if ((vdX_initial > 0)&&(vdB == 0)) 
-			cout <<"\t"<< vdX_initial <<"\t||\t"
-					<< (vdX_initial - vdA) / (vdX_initial - vdC) << endl;
+		if ((x_initial < 0) && (abs(b) >= kZero))
+			if (abs(10 + b) < kZero)
+			{
+				cout << "|\t" << x_initial << "\t||" 
+						<< "division by 0 |" << endl;;
+				continue;
+			}
+			else if (((ac | bc) & cc) == 0)
+				cout << "|\t" << x_initial << "\t||\t"
+						<< static_cast<int>(a - x_initial / (10 + b)) << "\t|" << endl;
+			else
+				cout << "|\t" << x_initial << "\t||\t"
+						<< a - x_initial / (10 + b) << "\t|" << endl;
+		
+		else if ((x_initial > 0) && (abs(b) < kZero))
+			if (abs(x_initial - c) < kZero)
+			{
+				cout << "|\t" << x_initial << "\t||"
+						<< "division by 0 |" << endl;;
+				continue;
+			}
+			else if (((ac | bc) & cc) == 0)
+				cout << "|\t" << x_initial << "\t||\t"
+						<< static_cast<int>((x_initial - a) / (x_initial - c)) << "\t|" << endl;
+			else
+				cout << "|\t" << x_initial << "\t||\t"
+						<< (x_initial - a) / (x_initial - c) << "\t|" << endl;
 		else 
-			cout <<"\t"<< vdX_initial <<"\t||\t"
-					<< 3*vdX_initial + 2/vdC << endl;
+			if (abs(c) < kZero)
+			{
+				cout << "|\t" << x_initial << "\t||"
+						<< "division by 0 |" << endl;;
+				continue;
+			}
+			else if (((ac | bc) & cc) == 0)
+				cout << "|\t" << x_initial << "\t||\t"
+						<< static_cast < int>(3 * x_initial + 2 / c) << "\t|" << endl;
+			else
+				cout << "|\t" << x_initial << "\t||\t"
+						<< 3 * x_initial + 2 / c << "\t|" << endl;
 	}
-	cout << string(32, '-') << endl;
+	cout << string(33, '-') << endl;
 
 	return 0;
 }

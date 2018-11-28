@@ -5,92 +5,100 @@ using namespace std;
 
 int main()
 {
-	unsigned short vusiOrder, vusiNumberOfPositive;
-	unsigned int vuiPositiveSum = 0, vuiDiagSum = 0;
+	unsigned short order;
 
-	fstream fMatrix("Matrix.txt");
+	fstream file_matrix("Matrix.txt");
+
+	if (!file_matrix)
+	{
+		cout << "Error opening file" << endl;
+		return 1;
+	}
 
 	cout << "The order of matrix: ";
-	fMatrix >> vusiOrder;
-	cout << vusiOrder;
+	file_matrix >> order;
+	cout << order;
 
-	int * * aiMatrix = new int * [vusiOrder];
-		for (int i = 0; i < vusiOrder; i++)
-			aiMatrix[i] = new int[vusiOrder];
+	int * * matrix = new int * [order];
+		for (int i = 0; i < order; i++)
+			matrix[i] = new int[order];
 
-	for (short i1 = 0; i1 < vusiOrder; i1++)
-		for (short i2 = 0; i2 < vusiOrder; i2++)
+	for (short i1 = 0; i1 < order; i1++)
+		for (short i2 = 0; i2 < order; i2++)
 		{
-			fMatrix >> aiMatrix[i1][i2];
+			file_matrix >> matrix[i1][i2];
 		}
 
-	fMatrix.close();
+	file_matrix.close();
 
 	cout << "\nEntered matrix:\n" << endl;
 
-	for (short i1 = 0; i1 < vusiOrder; i1++)
+	for (short i1 = 0; i1 < order; i1++)
 	{
-		for (short i2 = 0; i2 < vusiOrder; i2++)
+		for (short i2 = 0; i2 < order; i2++)
 		{
-			cout << "\t" << aiMatrix[i1][i2];
+			cout << "\t" << matrix[i1][i2];
 		}
 
 		cout << "\n\n";
 	}
 
-	for (short i2 = 0; i2 < vusiOrder; i2++)
-	{
-		vusiNumberOfPositive = 0;
+	unsigned short number_of_positive;
+	unsigned int positive_sum = 0, diag_sum = 0;
 
-		for (short i1 = 0; i1 < vusiOrder; i1++)
+	for (short i2 = 0; i2 < order; i2++)
+	{
+		number_of_positive = 0;
+
+		for (short i1 = 0; i1 < order; i1++)
 		{
-			if (aiMatrix[i1][i2] >= 0)
-				vusiNumberOfPositive++;
+			if (matrix[i1][i2] >= 0)
+				number_of_positive++;
 		}
 
-		if (vusiNumberOfPositive == vusiOrder)
+		if (number_of_positive == order)
 		{
-			for (short i = 0; i < vusiOrder; i++)
-				vuiPositiveSum += aiMatrix[i][i2];
+			for (short i = 0; i < order; i++)
+				positive_sum += matrix[i][i2];
 		}
 	}
 
 	cout << "\nThe sum of elements of positive matrix column is " 
-			<< vuiPositiveSum << endl;
+			<< positive_sum << endl;
 
-	unsigned int vuiMinimum = abs(aiMatrix[1][0]) + abs(aiMatrix[0][1]);
+	unsigned int minimum = abs(matrix[1][0]) + abs(matrix[0][1]);
 	
-	for (short i1 = 1; i1 < vusiOrder - 1; i1++)
+	for (short i1 = 1; i1 < order - 1; i1++)
 	{
-		vuiDiagSum = 0;
+		diag_sum = 0;
 
-		for (short i2 = 0; (i2 <= i1) && (i2 < vusiOrder); i2++)
-			vuiDiagSum += abs(aiMatrix[i2][i1 - i2]);
+		for (short i2 = 0; (i2 <= i1) && (i2 < order); i2++)
+			diag_sum += abs(matrix[i2][i1 - i2]);
 
-		if (vuiDiagSum < vuiMinimum)
-			vuiMinimum = vuiDiagSum;
+		if (diag_sum < minimum)
+			minimum = diag_sum;
 	}
 	
-	for (short i1 = 1; i1 < vusiOrder - 1; i1++)
+	for (short i1 = 1; i1 < order - 1; i1++)
 	{
-		vuiDiagSum = 0;
+		diag_sum = 0;
 
-		for (short i2 = 0; i2 < (vusiOrder - i1); i2++)
-			vuiDiagSum += abs(aiMatrix[i1 + i2][vusiOrder - 1 - i2]);
+		for (short i2 = 0; i2 < (order - i1); i2++)
+			diag_sum += abs(matrix[i1 + i2][order - 1 - i2]);
 
-		if (vuiDiagSum < vuiMinimum)
-			vuiMinimum = vuiDiagSum;
+		if (diag_sum < minimum)
+			minimum = diag_sum;
 	}
 
 	cout << "\nThe minimum of sum of modules of matrix diagonal elements is " 
-			<< vuiMinimum << endl;
+			<< minimum << endl;
 
-	for (int i = 0; i < vusiOrder; i++)
+	for (int i = 0; i < order; i++)
 	{
-		delete[] aiMatrix[i];
+		delete[] matrix[i];
 	}
 
-	delete[] aiMatrix;
+	delete[] matrix;
 
 	return 0;
 }

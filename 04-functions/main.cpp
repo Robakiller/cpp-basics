@@ -2,97 +2,91 @@
 #include <cmath>
 #include <cfloat>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
-void fvTable(void);
-void fvBreakRow(double);
-void fdFillTable(double, double, int);
+void Table(void);
+double FunctionDefinition(const int, int&, double, double, double);
+void FillTable(const int, double, double, int);
 
 int main()
 {
-	int viN;
-	const int cviMaxIter = 500;
-	double vdAccuracy, vdX_initial, vdX_final, vdDX;
+	const int kMaxIter = 500;
 
-	cout << "Enter the initial number X: "; cin >> vdX_initial;
-	cout << "\nEnter the final number X: "; cin >> vdX_final;
-	cout << "\nEnter the step dX: "; cin >> vdDX;
-	cout << "\nEnter the accuracy: "; cin >> vdAccuracy;
+	double x_initial, x_final, dx, accuracy;
 
-	fvTable();
-
-	for (double i = vdX_initial; i <= vdX_final; i += vdDX)
+	do
 	{
-		double vdCn = i, vdF = vdCn;
-		int viI = static_cast<int>(trunc(fabs(i)));
+		cout << "Please, enter the correct numbers!";
+		cout << "\nEnter the initial number X1 (-1 < X1 < 1): "; 
+			cin >> x_initial;
+		cout << "\nEnter the final number X2 (-1 < X2 < 1, X2 >= X1): "; 
+			cin >> x_final;
+		cout << "\nEnter the step dX (dX > 0): "; 
+			cin >> dx;
+		cout << "\nEnter the accuracy (> 0): "; 
+			cin >> accuracy;
+	} while ((fabs(x_initial) >= 1) || (fabs(x_final) >= 1) 
+				|| (dx <= 0) || (accuracy <= 0) || (x_initial > x_final));
 
-		for (viN = 0; fabs(vdCn) >= vdAccuracy; viN++)
-		{
-			if ((viN >= cviMaxIter) || (viI > 1))
-			{
-				fvBreakRow(i);
-				break;
-			}
+	Table();
 
-			vdCn *= ((2 * viN + 1)*pow(i, 2)) / (2 * viN + 3);
-			vdF += vdCn;
-		}
+	for (double i = x_initial; i <= x_final; i += dx)
+	{
+		int n;
+		double f = 0;
 
-		if ((viI < 1) && (fabs(fabs(i) - 1) > 1e-15))
-			fdFillTable(i, vdF, viN);
+		f = FunctionDefinition(kMaxIter, n, i, accuracy, f);
+
+		FillTable(kMaxIter, i, f, n);
 	}
 
-	cout << string(39, '-') << endl;
+	cout << "|" << string(11, '\xc4') << "|" << string(17, '\xc4');
+	cout << "|" << string(17, '\xc4') << "|" << string(9, '\xc4') << "|\n";
 
 	return 0;
 }
 
-void fvTable()
+void Table()
 {
-	cout << "\n\n" << string(39, '-');
-	cout << "\n|";
-	cout.width(7); cout << "X";
-	cout.width(7); cout << "||";
-	cout.width(7); cout << "F";
-	cout.width(7); cout << "||";
-	cout.width(5); cout << "N";
-	cout.width(6); cout << "|\n";
-	cout << string(39, '-') << endl;
+	cout << "|" << string(11, '\xc4') << "|" << string(17, '\xc4');
+	cout << "|" << string(17, '\xc4') << "|" << string(9, '\xc4') << "|\n";
+	cout << "|" << setw(6) << "x" << setw(6);
+	cout << "|" << setw(16) << "ln((1+x)/(1-x))" << setw(2);
+	cout << "|" << setw(16) << "ln((1+x)/(1-x))" << setw(2);
+	cout << "|" << setw(7) << "iters" << setw(4) << "|\n";
+	cout << "|" << string(11, ' ') << "|" << setw(12) << "(cmath)" << setw(6);
+	cout << "|" << setw(12) << "(mine)" << setw(6) << "|" << string(9, ' ') << "|\n";
+	cout << "|" << string(11, '\xc4') << "|" << string(17, '\xc4');
+	cout << "|" << string(17, '\xc4') << "|" << string(9, '\xc4') << "|\n";
+
 	cout << showpos << fixed;
+	cout.precision(6);
 }
 
-void fvBreakRow(double i)
+double FunctionDefinition(const int kMaxIter, int& n, double i, double accuracy, double f)
 {
-	cout << "|";
-	cout << showpos;
-	cout.precision(6);
-	cout.width(5); cout << i;
-	cout.width(5); cout << "||";
-	cout.precision(6);
-	cout << "RowBreaksUp";
-	cout.width(3); cout << "||";
-	cout.precision(6);
-	cout.width(5); cout << "-";
-	cout.width(6); cout << "|\n";
+	double cn = 2;
+
+	for (n = 0; (n <= kMaxIter) && (abs(cn) >= accuracy); n++)
+	{
+		cn = 2 * (pow(i, 1 + n * 2) / (1 + n * 2));
+		f += cn;
+	}
+
+	return f;
 }
 
-void fdFillTable(double i, double vdF, int viN)
+void FillTable(const int kMaxIter, double i, double f, int n)
 {
-	cout << "|";
-	cout << showpos;
-	cout.precision(6);
-	cout.width(5); cout << i;
-	cout.width(5); cout << "||";
-	cout.precision(6);
-	cout.width(5); cout << 2 * vdF;
-	cout.width(5); cout << "||";
-	cout << noshowpos;
-	cout.precision(6);
-	cout.width(5); cout << viN + 1;
-	cout.width(5); cout << "|";
+	cout << "|" << setw(10) << i << setw(2);
+	cout << "|" << setw(13) << log((1 + i) / (1 - i)) << setw(5) << "|";
 
-	cout << showpos;
-	cout << "In comparison with " << log((1 + i) / (1 - i))
-		<< " of cmath function" << endl;;
+	if (n > kMaxIter)
+		cout << " row breaks up ";
+	else
+		cout << setw(13) << f << setw(5);
+
+	cout << "|" << setw(5) << n << setw(6) << "|\n";
 }

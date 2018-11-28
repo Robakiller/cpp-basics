@@ -1,68 +1,72 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
 int main()
 {
-	string vsWord1 = "", vsWord2 = "";
+	ifstream file_text("Text.txt");
 
-	ifstream fText("Text.txt");
-
-	if (!fText)
+	if (!file_text)
 	{
 		cout << "Error opening file" << endl;
 		return 1;
 	}
 
-	for (int i = 0; i < 100; i++)
+	string one_line;
+	
+	while (getline(file_text, one_line))
 	{
-		string vsOnlyWord1 = "", vsOnlyWord2 = "", 
-				vsPunctuation1 = "", vsPunctuation2 = "";
+		istringstream line(one_line);
 
-		fText >> vsWord1 >> vsWord2;
-
-		for (string::size_type j = 0; j < vsWord1.size(); j++)
+		for (int i = 0; i < 100; i++)
 		{
-			if (!ispunct(vsWord1[j]) || vsWord1[j] == ' ')
+			string word1 = "", word2 = "",
+				only_word1 = "", only_word2 = "",
+				punctuation1 = "", punctuation2 = "";
+
+			line >> word1 >> word2;
+
+			for (string::size_type j = 0; j < word1.size(); j++)
 			{
-				vsOnlyWord1.push_back(vsWord1[j]);
+				if (!ispunct(word1[j]) || word1[j] == ' ')
+				{
+					only_word1.push_back(word1[j]);
+				}
+
+				if (ispunct(word1[j]))
+				{
+					punctuation1.push_back(word1[j]);
+				}
 			}
 
-			if (ispunct(vsWord1[j]))
+			for (string::size_type j = 0; j < word2.size(); j++)
 			{
-				vsPunctuation1.push_back(vsWord1[j]);
+				if (!ispunct(word2[j]) || word2[j] == ' ')
+				{
+					only_word2.push_back(word2[j]);
+				}
+
+				if (ispunct(word2[j]))
+				{
+					punctuation2.push_back(word2[j]);
+				}
 			}
+
+			if ((line.eof()) && (word2 == ""))
+			{
+				cout << word1 << endl;
+				break;
+			}
+
+			cout << only_word2 + punctuation1 + " "
+					+ only_word1 + punctuation2 + " ";
 		}
-
-		for (string::size_type j = 0; j < vsWord2.size(); j++)
-		{
-			if (!ispunct(vsWord2[j]) || vsWord2[j] == ' ')
-			{
-				vsOnlyWord2.push_back(vsWord2[j]);
-			}
-
-			if (ispunct(vsWord2[j]))
-			{
-				vsPunctuation2.push_back(vsWord2[j]);
-			}
-		}
-
-		if ((fText.eof()) && (vsWord2 == ""))
-		{
-			cout << vsWord1 << endl;
-			break;
-		}
-
-		cout << vsOnlyWord2 + vsPunctuation1 + " " 
-				+ vsOnlyWord1 + vsPunctuation2 + " ";
-
-		vsWord1 = "";
-		vsWord2 = "";
 	}
 
-	fText.close();
+	file_text.close();
 
 	return 0;
 }
