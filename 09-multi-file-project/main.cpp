@@ -1,34 +1,30 @@
 #include "functions.h"
 
-int main()
-{
-	int viN;
+int main() {
+	const unsigned short kArraySize = 10;
 
-	cout << "Enter the positive number of array elements: " << endl;
-	cin >> viN;
+	cout << "The number of array elements: " << kArraySize << endl;
 
-	double vdMaxElement, vdMin, vdMax, *padArray = new double[viN];
+	double min, max,
+		array[kArraySize] = { 3.0, 2.0, 0.0, 12.0, -6.0, 5.0, 1.0, -2.0, -1.0, -4.0 };
 
-	for (unsigned short i = 0; i < viN; i++)
-	{
-		cout << "Enter the element " << i + 1 << " of array: " << endl;
-		cin >> padArray[i];
-	}
+	for (unsigned short i = 0; i < kArraySize; i++)
+		cout << "The element " << i + 1
+				<< " of array: " << array[i] << endl;
 
-	cout << "\nDelete the elements on an interval [a,b]";
-	cout << "\nEnter the number a: ";
-	cin >> vdMin;
-	cout << "Enter the number b: ";
-	cin >> vdMax;
+	cout << "\nMaximum is " << FindMaxElement(array, kArraySize) << endl;
 
-	cout << "\nSum of positive numbers is " 
-			<< fdMaxElement(vdMaxElement, padArray, viN) << endl;
+	WriteSumBeforeLastPositive(array, kArraySize);
 
-	cout << "\nMaximum is " << vdMaxElement << endl;
+	do {
+		cout << "\nDelete the elements on an interval [a,b]";
+		cout << "\nEnter the number a: ";
+		cin >> min;
+		cout << "Enter the number b (b >= a): ";
+		cin >> max;
+	} while (max < min);
 
-	fvElementOfFinishArray(padArray, viN, vdMin, vdMax);
-
-	delete[] padArray;
+	WriteElementsOfFinishArray(array, kArraySize, min, max);
 
 	return 0;
 }

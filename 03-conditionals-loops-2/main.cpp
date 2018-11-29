@@ -5,16 +5,14 @@
 
 using namespace std;
 
-int main()
-{
+int main() {
 	const int kMaxIter = 500;
 
 	double x_initial, x_final, dx, accuracy;
 
 	cout << showpos << fixed;
 
-	do
-	{
+	do {
 		cout << "Please, enter the correct numbers!";
 		cout << "\nEnter the initial number X1 (-1 < X1 < 1): "; 
 			cin >> x_initial;
@@ -24,8 +22,8 @@ int main()
 			cin >> dx;
 		cout << "\nEnter the accuracy (> 0): "; 
 			cin >> accuracy;
-	} while ((fabs(x_initial) >= 1) || (fabs(x_final) >= 1) 
-				|| (dx <= 0) || (accuracy <= 0) || (x_initial > x_final));
+	} while ((fabs(x_initial) >= 1) || (fabs(x_final) >= 1) || 
+			(dx <= 0) || (accuracy <= 0) || (x_initial > x_final));
 
 	cout << "|" << string(11, '\xc4') << "|" << string(17, '\xc4');
 	cout << "|" << string(17, '\xc4') << "|" << string(9, '\xc4') << "|\n";
@@ -40,13 +38,11 @@ int main()
 	
 	cout.precision(6);
 
-	for (double i = x_initial; i <= x_final; i += dx)
-	{
+	for (double i = x_initial; i <= x_final; i += dx) {
 		int n;
 		double cn = 2, f = 0;
 
-		for (n = 0; (n <= kMaxIter)&&(abs(cn) >= accuracy); n++)
-		{
+		for (n = 0; (n <= kMaxIter)&&(abs(cn) >= accuracy); n++) {
 			cn = 2 * (pow(i, 1 + n * 2) / (1 + n * 2));
 			f += cn;
 		}

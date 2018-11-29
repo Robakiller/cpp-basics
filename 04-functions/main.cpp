@@ -10,14 +10,12 @@ void Table(void);
 double FunctionDefinition(const int, int&, double, double, double);
 void FillTable(const int, double, double, int);
 
-int main()
-{
+int main() {
 	const int kMaxIter = 500;
 
 	double x_initial, x_final, dx, accuracy;
 
-	do
-	{
+	do {
 		cout << "Please, enter the correct numbers!";
 		cout << "\nEnter the initial number X1 (-1 < X1 < 1): "; 
 			cin >> x_initial;
@@ -27,13 +25,12 @@ int main()
 			cin >> dx;
 		cout << "\nEnter the accuracy (> 0): "; 
 			cin >> accuracy;
-	} while ((fabs(x_initial) >= 1) || (fabs(x_final) >= 1) 
-				|| (dx <= 0) || (accuracy <= 0) || (x_initial > x_final));
+	} while ((fabs(x_initial) >= 1) || (fabs(x_final) >= 1) || 
+			(dx <= 0) || (accuracy <= 0) || (x_initial > x_final));
 
 	Table();
 
-	for (double i = x_initial; i <= x_final; i += dx)
-	{
+	for (double i = x_initial; i <= x_final; i += dx) {
 		int n;
 		double f = 0;
 
@@ -48,8 +45,7 @@ int main()
 	return 0;
 }
 
-void Table()
-{
+void Table() {
 	cout << "|" << string(11, '\xc4') << "|" << string(17, '\xc4');
 	cout << "|" << string(17, '\xc4') << "|" << string(9, '\xc4') << "|\n";
 	cout << "|" << setw(6) << "x" << setw(6);
@@ -65,12 +61,10 @@ void Table()
 	cout.precision(6);
 }
 
-double FunctionDefinition(const int kMaxIter, int& n, double i, double accuracy, double f)
-{
+double FunctionDefinition(const int kMaxIter, int& n, double i, double accuracy, double f) {
 	double cn = 2;
 
-	for (n = 0; (n <= kMaxIter) && (abs(cn) >= accuracy); n++)
-	{
+	for (n = 0; (n <= kMaxIter) && (abs(cn) >= accuracy); n++) {
 		cn = 2 * (pow(i, 1 + n * 2) / (1 + n * 2));
 		f += cn;
 	}
@@ -78,8 +72,7 @@ double FunctionDefinition(const int kMaxIter, int& n, double i, double accuracy,
 	return f;
 }
 
-void FillTable(const int kMaxIter, double i, double f, int n)
-{
+void FillTable(const int kMaxIter, double i, double f, int n) {
 	cout << "|" << setw(10) << i << setw(2);
 	cout << "|" << setw(13) << log((1 + i) / (1 - i)) << setw(5) << "|";
 

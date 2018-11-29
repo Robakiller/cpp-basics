@@ -3,73 +3,70 @@
 
 using namespace std;
 
-struct AEROFLOT
-{
-	string vsDestination;
-	string vsAircraftType;
-	unsigned short vusiFlightNumber;
+struct Aeroflot {
+	string destination;
+	string aircraft_type;
+	unsigned short flight_number;
 };
 
-int main()
-{
-	AEROFLOT * pascFlights = new AEROFLOT[7];
-	string TimeString = "";
-	unsigned short TimeNumber = 0;
+int main() {
+	const short kFlightsNumber = 7;
 
-	cout << "Enter the destination of flight, flight number and aircraft type: "
+	Aeroflot* flights = new Aeroflot[kFlightsNumber];
+	string time_string = "";
+	unsigned short time_number = 0;
+
+	cout << "Enter the seven flights (destination of flight | flight number | aircraft type): "
 			<< endl;
 
-	for (short i = 0; i < 7; i++)
-		cin >> pascFlights[i].vsDestination
-			>> pascFlights[i].vusiFlightNumber 
-			>> pascFlights[i].vsAircraftType;
+	for (short i = 0; i < kFlightsNumber; i++)
+		cin >> flights[i].destination
+			>> flights[i].flight_number
+			>> flights[i].aircraft_type;
 
-	for (short i = 0; i < 7; i++)
-	{
-		for (short j = 0; j < 6; j++)
-			if (pascFlights[j].vsDestination > pascFlights[j + 1].vsDestination)
-			{
-				TimeString = pascFlights[j].vsDestination;
-				pascFlights[j].vsDestination = pascFlights[j + 1].vsDestination;
-				pascFlights[j + 1].vsDestination = TimeString;
+	for (short i = 0; i < kFlightsNumber; i++) {
+		for (short j = 0; j < kFlightsNumber - 1; j++)
+			if (flights[j].destination > flights[j + 1].destination) {
+				time_string = flights[j].destination;
+				flights[j].destination = flights[j + 1].destination;
+				flights[j + 1].destination = time_string;
 
-				TimeString = pascFlights[j].vsAircraftType;
-				pascFlights[j].vsAircraftType = pascFlights[j + 1].vsAircraftType;
-				pascFlights[j + 1].vsAircraftType = TimeString;
+				time_string = flights[j].aircraft_type;
+				flights[j].aircraft_type = flights[j + 1].aircraft_type;
+				flights[j + 1].aircraft_type = time_string;
 
-				TimeNumber = pascFlights[j].vusiFlightNumber;
-				pascFlights[j].vusiFlightNumber = pascFlights[j + 1].vusiFlightNumber;
-				pascFlights[j + 1].vusiFlightNumber = TimeNumber;
+				time_number = flights[j].flight_number;
+				flights[j].flight_number = flights[j + 1].flight_number;
+				flights[j + 1].flight_number = time_number;
 			}
 	}
 
 	cout << "\nEntered flights:\n";
 
-	for (short i = 0; i < 7; i++)
-		cout << pascFlights[i].vsDestination << " "
-				<< pascFlights[i].vusiFlightNumber << ", ";
+	for (short i = 0; i < kFlightsNumber; i++)
+		cout << flights[i].destination << " "
+				<< flights[i].flight_number << " "
+					<< flights[i].aircraft_type << ", ";
 
-	while (true)
-	{
-		cout << "\nEnter the type of aircraft for getting list or 0 for exit: ";
-		string vsEnteredAircraftType;
-		cin >> vsEnteredAircraftType;
+	while (true) {
+		cout << "\n\nEnter the type of aircraft for getting list or 0 for exit: ";
+		string entered_aircraft_type;
+		cin >> entered_aircraft_type;
 
-		if (vsEnteredAircraftType == "0")
+		if (entered_aircraft_type == "0")
 			break;
 
 		cout << "Such flights: " << endl;
-		TimeNumber = 0;
+		time_number = 0;
 
-		for (short i = 0; i < 7; i++)
-			if (pascFlights[i].vsAircraftType == vsEnteredAircraftType)
-				cout << "Flight - " << pascFlights[i].vsDestination << " "
-						<< pascFlights[i].vusiFlightNumber << endl;
+		for (short i = 0; i < kFlightsNumber; i++)
+			if (flights[i].aircraft_type == entered_aircraft_type)
+				cout << "Flight - " << flights[i].destination << " "
+						<< flights[i].flight_number << endl;
 			else
-				TimeNumber++;
+				time_number++;
 
-		if (TimeNumber == 7)
-		{
+		if (time_number == kFlightsNumber) {
 			cout << "Such flights were not found";
 		}
 	}
