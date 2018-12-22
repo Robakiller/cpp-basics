@@ -1,127 +1,145 @@
 #include <iostream>
-#include <string>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
 template <typename MatrixDataType>
-short OperateMatrix(const unsigned short, string);
+MatrixDataType** ReadMatrix(string, unsigned short&);
 
 template <typename MatrixDataType>
-MatrixDataType DoFirstTask(const unsigned short, MatrixDataType**);
+void PrintMatrix(MatrixDataType**, unsigned short);
 
 template <typename MatrixDataType>
-MatrixDataType DoSecondTask(const unsigned short, MatrixDataType**);
+bool SumNonNegativeCols(MatrixDataType**, unsigned short, MatrixDataType&);
+
+template <typename MatrixDataType>
+MatrixDataType MinSecondaryDiagonalsSum(MatrixDataType**, unsigned short);
+
+template <typename MatrixDataType>
+short OperateMatrix(string);
 
 int main() {
-	const unsigned short kOrder = 3;
-	unsigned short matrix_data_type;
-
+    string matrix_data_type;
 data_type_entry:
-	cout << "The data type of matrix (0 - float, 1 - integer, 2 - double): ";
-	cin >> matrix_data_type;
+    cout << "The data type of matrix (0 - integer, 1 - float, 2 - double): ";
+    cin >> matrix_data_type;
+    if (matrix_data_type == "0") {
+        OperateMatrix<int>("intMatrix.txt");
+    }
+    else if (matrix_data_type == "1") {
+        OperateMatrix<float>("floatMatrix.txt");
+    }
+    else if (matrix_data_type == "2") {
+        OperateMatrix<double>("doubleMatrix.txt");
+    }
+    else {
+        cout << "Please, enter the correct data type of matrix!\n\n";
+        goto data_type_entry;
+    }
 
-	switch (matrix_data_type) {
-		case 0: OperateMatrix<float>(kOrder, "float"); break;
-		case 1: OperateMatrix<int>(kOrder, "int"); break;
-		case 2: OperateMatrix<double>(kOrder, "double"); break;
-		default: cout << "Please, enter the correct number of the data type of matrix!\n\n"; goto data_type_entry;
-	}
-
-	return 0;
+    return 0;
 }
 
 template <typename MatrixDataType>
-short OperateMatrix(const unsigned short kOrder, string matrix_data_type) {
-	ifstream file_matrix(matrix_data_type + "Matrix.txt");
+short OperateMatrix(string file_name) {
+    unsigned short order;
+    MatrixDataType** matrix = ReadMatrix<MatrixDataType>(file_name, order);
+    if (!matrix) return 1;
 
-	if (!file_matrix) {
-		cout << "Error opening file" << endl;
-		return 1;
-	}
+    cout << "Matrix:\n";
+    PrintMatrix(matrix, order);
 
-	MatrixDataType** matrix = new MatrixDataType*[kOrder];
-	for (short i = 0; i < kOrder; i++)
-		matrix[i] = new MatrixDataType[kOrder];
+    cout << "The sum of elements of non-negative matrix columns is: ";
+    MatrixDataType total_sum;
+    if (SumNonNegativeCols(matrix, order, total_sum))
+        cout << total_sum << endl;
+    else
+        cout << "\nNo non-negative columns were found.\n";
 
-	for (short i1 = 0; i1 < kOrder; i1++)
-		for (short i2 = 0; i2 < kOrder; i2++) {
-			file_matrix >> matrix[i1][i2];
-		}
+    cout << "\nThe minimum among the sums of modules of elements of the\n";
+    cout << "diagonals parallel to the secondary diagonal of the matrix: ";
+    cout << MinSecondaryDiagonalsSum(matrix, order) << endl;
 
-	cout << "\nEntered matrix:\n" << endl;
+    for (unsigned short i = 0; i < order; i++) delete[] matrix[i];
+    delete[] matrix;
 
-	for (short i1 = 0; i1 < kOrder; i1++) {
-		for (short i2 = 0; i2 < kOrder; i2++) {
-			cout << "\t" << matrix[i1][i2];
-		}
-
-		cout << "\n\n";
-	}
-
-	file_matrix.close();
-
-	cout << "\nThe sum of elements of positive matrix column is "
-			<< DoFirstTask<MatrixDataType>(kOrder, matrix) << endl;
-	
-	cout << "\nThe minimum of sum of modules of matrix diagonal elements is "
-			<< DoSecondTask<MatrixDataType>(kOrder, matrix) << endl;
-
-	for (int i = 0; i < kOrder; i++) {
-		delete[] matrix[i];
-	}
-
-	delete[] matrix;
-
-	return 0;
+    return 0;
 }
 
 template <typename MatrixDataType>
-MatrixDataType DoFirstTask(const unsigned short kOrder, MatrixDataType** matrix) {
-	unsigned short number_of_positive;
-	MatrixDataType positive_sum = 0;
+MatrixDataType** ReadMatrix(string file_name, unsigned short& order) {
+    ifstream fin(file_name);
+    if (!fin.is_open()) {
+        cout << "\nCan't open file " << file_name << "!\n";
+        return nullptr;
+    }
 
-	for (short i2 = 0; i2 < kOrder; i2++) {
-		number_of_positive = 0;
-
-		for (short i1 = 0; i1 < kOrder; i1++) {
-			if (matrix[i1][i2] >= 0)
-				number_of_positive++;
-		}
-
-		if (number_of_positive == kOrder) {
-			for (short i = 0; i < kOrder; i++)
-				positive_sum += matrix[i][i2];
-		}
-	}
-
-	return positive_sum;
+    fin >> order;
+    MatrixDataType** matrix = new MatrixDataType*[order];
+    for (unsigned short i = 0; i < order; i++) {
+        matrix[i] = new MatrixDataType[order];
+        for (unsigned short j = 0; j < order; j++)
+            fin >> matrix[i][j];
+    }
+    fin.close();
+    return matrix;
 }
 
 template <typename MatrixDataType>
-MatrixDataType DoSecondTask(const unsigned short kOrder, MatrixDataType** matrix) {
-	MatrixDataType minimum = abs(matrix[1][0]) + abs(matrix[0][1]), 
-						diag_sum = 0;
+void PrintMatrix(MatrixDataType** matrix, unsigned short order) {
+    for (unsigned short i = 0; i < order; i++) {
+        for (unsigned short j = 0; j < order; j++)
+            cout << "\t" << matrix[i][j];
+        cout << "\n\n";
+    }
+}
 
-	for (short i1 = 1; i1 < kOrder - 1; i1++) {
-		diag_sum = 0;
+template <typename MatrixDataType>
+bool SumNonNegativeCols(MatrixDataType** matrix, unsigned short order,
+    MatrixDataType& total_sum) {
 
-		for (short i2 = 0; (i2 <= i1) && (i2 < kOrder); i2++)
-			diag_sum += abs(matrix[i2][i1 - i2]);
+    total_sum = 0;
+    bool non_negative_col_found = false;
+    for (unsigned short j = 0; j < order; j++) {
+        MatrixDataType col_sum = 0;
+        for (unsigned short i = 0; i < order; i++) {
+            if (matrix[i][j] < 0) {
+                col_sum = 0;
+                break;
+            }
+            else {
+                col_sum += matrix[i][j];
+            }
 
-		if (diag_sum < minimum)
-			minimum = diag_sum;
-	}
+            if (i == order - 1)
+                non_negative_col_found = true;
+        }
+        total_sum += col_sum;
+    }
 
-	for (short i1 = 1; i1 < kOrder - 1; i1++) {
-		diag_sum = 0;
+    return non_negative_col_found;
+}
 
-		for (short i2 = 0; i2 < (kOrder - i1); i2++)
-			diag_sum += abs(matrix[i1 + i2][kOrder - 1 - i2]);
+template <typename MatrixDataType>
+MatrixDataType MinSecondaryDiagonalsSum(MatrixDataType** matrix, unsigned short order) {
+    MatrixDataType minimum = abs(matrix[0][0]);
+    for (short i = 1; i < order - 1; i++) {
+        MatrixDataType diag_sum = 0;
+        for (short j = 0; j <= i; j++)
+            diag_sum += abs(matrix[j][i - j]);
 
-		if (diag_sum < minimum)
-			minimum = diag_sum;
-	}
+        if (diag_sum < minimum)
+            minimum = diag_sum;
+    }
 
-	return minimum;
+    for (short i = 1; i < order; i++) {
+        MatrixDataType diag_sum = 0;
+        for (short j = 0; j < (order - i); j++)
+            diag_sum += abs(matrix[i + j][order - 1 - j]);
+
+        if (diag_sum < minimum)
+            minimum = diag_sum;
+    }
+    return minimum;
 }

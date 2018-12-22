@@ -1,30 +1,27 @@
 #include "functions.h"
 
 int main() {
-	const unsigned short kArraySize = 10;
+    const unsigned short kArraySize = 10;
+    cout << "The number of arr elements: " << kArraySize << endl;
+    double arr[kArraySize] = { 3, .2, 0, .1, -6, .5, 1, -.2, -1, -4 };
+    PrintArray(arr, kArraySize);
 
-	cout << "The number of array elements: " << kArraySize << endl;
+    cout << "\nMaximum is " << FindMaxElement(arr, kArraySize) << endl;
 
-	double min, max,
-		array[kArraySize] = { 3.0, 2.0, 0.0, 12.0, -6.0, 5.0, 1.0, -2.0, -1.0, -4.0 };
+    PrintSumBeforeLastPositive(arr, kArraySize);
 
-	for (unsigned short i = 0; i < kArraySize; i++)
-		cout << "The element " << i + 1
-				<< " of array: " << array[i] << endl;
+    double min, max;
+    do {
+        cout << "\nDelete the elements on an interval [a,b]";
+        cout << "\nEnter the number a: ";
+        cin >> min;
+        cout << "Enter the number b (b >= a): ";
+        cin >> max;
+    } while (max < min);
 
-	cout << "\nMaximum is " << FindMaxElement(array, kArraySize) << endl;
+    cout << "\nCompressed array:\n";
+    CompressArray(arr, kArraySize, min, max);
+    PrintArray(arr, kArraySize);
 
-	WriteSumBeforeLastPositive(array, kArraySize);
-
-	do {
-		cout << "\nDelete the elements on an interval [a,b]";
-		cout << "\nEnter the number a: ";
-		cin >> min;
-		cout << "Enter the number b (b >= a): ";
-		cin >> max;
-	} while (max < min);
-
-	WriteElementsOfFinishArray(array, kArraySize, min, max);
-
-	return 0;
+    return 0;
 }

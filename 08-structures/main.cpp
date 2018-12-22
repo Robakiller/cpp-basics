@@ -4,72 +4,94 @@
 using namespace std;
 
 struct Aeroflot {
-	string destination;
-	string aircraft_type;
-	unsigned short flight_number;
+    string destination;
+    string aircraft_type;
+    int flight_number;
 };
 
+bool IsNumber(string);
+Aeroflot* InputFlights(short);
+void SortFlights(Aeroflot*, short);
+void PrintFlights(Aeroflot*, short);
+void SearchAircraftType(Aeroflot*, short, string);
+
 int main() {
-	const short kFlightsNumber = 7;
+    short num_flights = 7;
+    Aeroflot* flights = InputFlights(num_flights);
+    SortFlights(flights, num_flights);
 
-	Aeroflot* flights = new Aeroflot[kFlightsNumber];
-	string time_string = "";
-	unsigned short time_number = 0;
+    cout << "Flights sorted by destination:\n";
+    PrintFlights(flights, num_flights);
 
-	cout << "Enter the seven flights (destination of flight | flight number | aircraft type): "
-			<< endl;
+    string aircraft_type;
+    while (true) {
+        cout << "\nEnter the type of aircraft to search (or 0 to exit): ";
+        cin >> aircraft_type;
+        if (aircraft_type == "0") break;
+        SearchAircraftType(flights, num_flights, aircraft_type);
+    }
 
-	for (short i = 0; i < kFlightsNumber; i++)
-		cin >> flights[i].destination
-			>> flights[i].flight_number
-			>> flights[i].aircraft_type;
+    delete[] flights;
+    return 0;
+}
 
-	for (short i = 0; i < kFlightsNumber; i++) {
-		for (short j = 0; j < kFlightsNumber - 1; j++)
-			if (flights[j].destination > flights[j + 1].destination) {
-				time_string = flights[j].destination;
-				flights[j].destination = flights[j + 1].destination;
-				flights[j + 1].destination = time_string;
+bool IsNumber(string number) {
+    for (size_t i = 0; i < number.length(); i++)
+        if (!isdigit(number[i]))
+            return 0;
+    return 1;
+}
 
-				time_string = flights[j].aircraft_type;
-				flights[j].aircraft_type = flights[j + 1].aircraft_type;
-				flights[j + 1].aircraft_type = time_string;
+Aeroflot* InputFlights(short num_flights) {
+    Aeroflot* flights = new Aeroflot[num_flights];
+    string buf;
+    for (short i = 0; i < num_flights; i++) {
+        cout << "Flight #" << i + 1 << "\ndestination: ";
+        getline(cin, flights[i].destination);
 
-				time_number = flights[j].flight_number;
-				flights[j].flight_number = flights[j + 1].flight_number;
-				flights[j + 1].flight_number = time_number;
-			}
-	}
+    repeat_flight_number:
+        cout << "flight number: ";
+        getline(cin, buf);
+        if (!IsNumber(buf)) {
+            cout << "Error: digits only!\n";
+            goto repeat_flight_number;
+        }
+        flights[i].flight_number = stoi(buf);
 
-	cout << "\nEntered flights:\n";
+        cout << "aircraft type: ";
+        getline(cin, flights[i].aircraft_type);
+        cout << endl;
+    }
 
-	for (short i = 0; i < kFlightsNumber; i++)
-		cout << flights[i].destination << " "
-				<< flights[i].flight_number << " "
-					<< flights[i].aircraft_type << ", ";
+    return flights;
+}
 
-	while (true) {
-		cout << "\n\nEnter the type of aircraft for getting list or 0 for exit: ";
-		string entered_aircraft_type;
-		cin >> entered_aircraft_type;
+void SortFlights(Aeroflot* flights, short num_flights) {
+    for (short i = 0; i < num_flights - 1; i++)
+        for (short j = 0; j < num_flights - i - 1; j++)
+            if (flights[j].destination > flights[j + 1].destination)
+                swap(flights[j], flights[j + 1]);
+}
 
-		if (entered_aircraft_type == "0")
-			break;
+void PrintFlights(Aeroflot* flights, short num_flights) {
+    for (short i = 0; i < num_flights; i++) {
+        cout << "\ndestination: " << flights[i].destination;
+        cout << "\nflight number: " << flights[i].flight_number;
+        cout << "\naircraft type: " << flights[i].aircraft_type << endl;
+    }
+}
 
-		cout << "Such flights: " << endl;
-		time_number = 0;
+void SearchAircraftType(Aeroflot* flights, short num_flights, string aircraft_type) {
+    bool flight_found = false;
 
-		for (short i = 0; i < kFlightsNumber; i++)
-			if (flights[i].aircraft_type == entered_aircraft_type)
-				cout << "Flight - " << flights[i].destination << " "
-						<< flights[i].flight_number << endl;
-			else
-				time_number++;
+    for (short i = 0; i < num_flights; i++)
+        if (flights[i].aircraft_type == aircraft_type) {
+            flight_found = true;
+            cout << "\ndestination: " << flights[i].destination;
+            cout << "\nflight number: " << flights[i].flight_number;
+            cout << endl;
+        }
 
-		if (time_number == kFlightsNumber) {
-			cout << "Such flights were not found";
-		}
-	}
-
-	return 0;
+    if (!flight_found)
+        cout << "Such flights were not found.\n";
 }

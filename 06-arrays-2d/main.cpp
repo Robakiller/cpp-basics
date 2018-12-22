@@ -1,92 +1,108 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
+int** ReadMatrix(string, unsigned short&);
+void PrintMatrix(int**, unsigned short);
+bool SumNonNegativeCols(int**, unsigned short, unsigned long long&);
+unsigned long long MinSecondaryDiagonalsSum(int**, unsigned short);
+
 int main() {
-	unsigned short order;
+    unsigned short order;
+    int** matrix = ReadMatrix("Matrix.txt", order);
+    if (!matrix) return 1;
 
-	fstream file_matrix("Matrix.txt");
+    cout << "Matrix:\n";
+    PrintMatrix(matrix, order);
 
-	if (!file_matrix) {
-		cout << "Error opening file" << endl;
-		return 1;
-	}
+    cout << "The sum of elements of non-negative matrix columns is: ";
+    unsigned long long total_sum;
+    if (SumNonNegativeCols(matrix, order, total_sum))
+        cout << total_sum << endl;
+    else
+        cout << "\nNo non-negative columns were found.\n";    
 
-	cout << "The order of matrix: ";
-	file_matrix >> order;
-	cout << order;
+    cout << "\nThe minimum among the sums of modules of elements of the\n";
+    cout << "diagonals parallel to the secondary diagonal of the matrix: ";
+    cout << MinSecondaryDiagonalsSum(matrix, order) << endl;
 
-	int** matrix = new int* [order];
-		for (int i = 0; i < order; i++)
-			matrix[i] = new int[order];
+    for (unsigned short i = 0; i < order; i++) delete[] matrix[i];
+    delete[] matrix;
 
-	for (short i1 = 0; i1 < order; i1++)
-		for (short i2 = 0; i2 < order; i2++)
-			file_matrix >> matrix[i1][i2];
+    return 0;
+}
 
-	file_matrix.close();
+int** ReadMatrix(string file_name, unsigned short& order) {
+    ifstream fin(file_name);
+    if (!fin.is_open()) {
+        cout << "\nCan't open file " << file_name << "!\n";
+        return nullptr;
+    }
 
-	cout << "\nEntered matrix:\n" << endl;
+    fin >> order;
+    int** matrix = new int*[order];
+    for (unsigned short i = 0; i < order; i++) {
+        matrix[i] = new int[order];
+        for (unsigned short j = 0; j < order; j++)
+            fin >> matrix[i][j];
+    }
+    fin.close();
+    return matrix;
+}
 
-	for (short i1 = 0; i1 < order; i1++) {
-		for (short i2 = 0; i2 < order; i2++) {
-			cout << "\t" << matrix[i1][i2];
-		}
+void PrintMatrix(int** matrix, unsigned short order) {
+    for (unsigned short i = 0; i < order; i++) {
+        for (unsigned short j = 0; j < order; j++)
+            cout << "\t" << matrix[i][j];
+        cout << "\n\n";
+    }
+}
 
-		cout << "\n\n";
-	}
+bool SumNonNegativeCols(int** matrix, unsigned short order,
+    unsigned long long& total_sum) {
 
-	unsigned short number_of_positive;
-	unsigned int positive_sum = 0, diag_sum = 0;
+    total_sum = 0;
+    bool non_negative_col_found = false;
+    for (unsigned short j = 0; j < order; j++) {
+        unsigned long long col_sum = 0;
+        for (unsigned short i = 0; i < order; i++) {
+            if (matrix[i][j] < 0) {
+                col_sum = 0;
+                break;
+            }
+            else {
+                col_sum += matrix[i][j];
+            }
 
-	for (short i2 = 0; i2 < order; i2++) {
-		number_of_positive = 0;
+            if (i == order - 1)
+                non_negative_col_found = true;
+        }
+        total_sum += col_sum;
+    }
 
-		for (short i1 = 0; i1 < order; i1++) {
-			if (matrix[i1][i2] >= 0)
-				number_of_positive++;
-		}
+    return non_negative_col_found;
+}
 
-		if (number_of_positive == order) {
-			for (short i = 0; i < order; i++)
-				positive_sum += matrix[i][i2];
-		}
-	}
+unsigned long long MinSecondaryDiagonalsSum(int** matrix, unsigned short order) {
+    unsigned long long minimum = abs(matrix[0][0]);
+    for (short i = 1; i < order - 1; i++) {
+        unsigned long long diag_sum = 0;
+        for (short j = 0; j <= i; j++)
+            diag_sum += abs(matrix[j][i - j]);
 
-	cout << "\nThe sum of elements of positive matrix column is " 
-			<< positive_sum << endl;
+        if (diag_sum < minimum)
+            minimum = diag_sum;
+    }
 
-	unsigned int minimum = abs(matrix[1][0]) + abs(matrix[0][1]);
-	
-	for (short i1 = 1; i1 < order - 1; i1++) {
-		diag_sum = 0;
+    for (short i = 1; i < order; i++) {
+        unsigned long long diag_sum = 0;
+        for (short j = 0; j < (order - i); j++)
+            diag_sum += abs(matrix[i + j][order - 1 - j]);
 
-		for (short i2 = 0; (i2 <= i1) && (i2 < order); i2++)
-			diag_sum += abs(matrix[i2][i1 - i2]);
-
-		if (diag_sum < minimum)
-			minimum = diag_sum;
-	}
-	
-	for (short i1 = 1; i1 < order - 1; i1++) {
-		diag_sum = 0;
-
-		for (short i2 = 0; i2 < (order - i1); i2++)
-			diag_sum += abs(matrix[i1 + i2][order - 1 - i2]);
-
-		if (diag_sum < minimum)
-			minimum = diag_sum;
-	}
-
-	cout << "\nThe minimum of sum of modules of matrix diagonal elements is " 
-			<< minimum << endl;
-
-	for (int i = 0; i < order; i++) {
-		delete[] matrix[i];
-	}
-
-	delete[] matrix;
-
-	return 0;
+        if (diag_sum < minimum)
+            minimum = diag_sum;
+    }
+    return minimum;
 }

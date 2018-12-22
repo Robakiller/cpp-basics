@@ -1,57 +1,59 @@
 #include "functions.h"
 
-double FindMaxElement(double* array, const unsigned short kArraySize) {
-	double max_element = array[0];
-
-	for (unsigned short i = 0; i < kArraySize; i++)
-		if (array[i] > max_element)
-			max_element = array[i];
-
-	return max_element;
+void PrintArray(double* arr, const unsigned short kArraySize) {
+    for (unsigned short i = 0; i < kArraySize; i++)
+        cout << "The element " << i + 1
+        << " of array: " << arr[i] << endl;
 }
 
+double FindMaxElement(double* arr, const unsigned short kArraySize) {
+    double max_element = arr[0];
 
-void WriteSumBeforeLastPositive(double* array, const unsigned short kArraySize) {
-	double final_positive = -1.0, sum = 0.0;
+    for (unsigned short i = 1; i < kArraySize; i++)
+        if (arr[i] > max_element)
+            max_element = arr[i];
 
-	for (unsigned short i = 0; i < kArraySize; i++)
-		if (array[i] > 0)
-			final_positive = i;
-
-	if (final_positive != -1) {
-		if (final_positive != 0) {
-			for (unsigned short i = 0; i < final_positive; i++)
-				sum += array[i];
-			cout << "\nSum of numbers before last positive one is " << sum << endl;
-		}
-		else {
-			cout << "\nLast positive element is the first one!" << endl;
-		}
-	}
-	else {
-		cout << "\nThere are not the positive numbers!" << endl;
-	}
+    return max_element;
 }
 
-void WriteElementsOfFinishArray(double* array, const unsigned short kArraySize, double min, double max) {
-	int kept_numbers = kArraySize;
+short FindLastPositive(double* arr, const unsigned short kArraySize) {
+    for (short i = kArraySize - 1; i >= 0; i--)
+        if (arr[i] > 0)
+            return i;
+    return -1;
+}
 
-	for (unsigned short i = 0; i < kept_numbers;) {
-		if ((array[i] >= min) && (array[i] <= max)) {
-			kept_numbers--;
-			for (unsigned short j = i; j < kept_numbers; j++)
-				array[j] = array[j + 1];
-			array[kept_numbers] = 0.0;
-		}
-		else {
-			i++;
-		}
-	}
+void PrintSumBeforeLastPositive(double* arr, const unsigned short kArraySize) {
+    cout << "\nSum of numbers before the last positive is: ";
+    short last_positive = FindLastPositive(arr, kArraySize);
+    if (last_positive != -1) {
+        if (last_positive != 0) {
+            double sum = 0.0;
+            for (unsigned short i = 0; i < last_positive; i++)
+                sum += arr[i];
+            cout << sum << endl;
+        }
+        else {
+            cout << "\nLast positive element is the first one!\n";
+        }
+    }
+    else {
+        cout << "\nThere are no positive numbers!\n";
+    }
+}
 
-	cout << endl;
+void CompressArray(double* arr, const unsigned short kArraySize, double min, double max) {
+    int kept_numbers = kArraySize;
 
-	for (unsigned short i = 0; i < kArraySize; i++) {
-		cout << "The element " << i + 1
-			<< " of compressed array: " << array[i] << endl;
-	}
+    for (unsigned short i = 0; i < kept_numbers;) {
+        if ((arr[i] >= min) && (arr[i] <= max)) {
+            kept_numbers--;
+            for (unsigned short j = i; j < kept_numbers; j++)
+                arr[j] = arr[j + 1];
+            arr[kept_numbers] = 0.0;
+        }
+        else {
+            i++;
+        }
+    }
 }

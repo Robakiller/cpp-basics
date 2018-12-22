@@ -1,73 +1,92 @@
 #include <iostream>
-
 using namespace std;
 
+void PrintArray(double*, const unsigned short);
+double FindMaxElement(double*, const unsigned short);
+short FindLastPositive(double*, const unsigned short);
+void PrintSumBeforeLastPositive(double*, const unsigned short);
+void CompressArray(double*, const unsigned short, double, double);
+
 int main() {
-	const unsigned short kArraySize = 10;
+    const unsigned short kArraySize = 10;
+    cout << "The number of arr elements: " << kArraySize << endl;
+    double arr[kArraySize] = { 3, .2, 0, .1, -6, .5, 1, -.2, -1, -4 };
+    PrintArray(arr, kArraySize);
 
-	cout << "The number of array elements: " << kArraySize << endl;
+    cout << "\nMaximum is " << FindMaxElement(arr, kArraySize) << endl;
 
-	double max_element, sum = 0.0, min, max, final_positive = -1.0,
-		array[kArraySize] = {7.0, 0.0, 4.0, 3.0, -2.0, 9.0, 0.0, 2.0, -1.0, -3.0};
+    PrintSumBeforeLastPositive(arr, kArraySize);
 
-	for (unsigned short i = 0; i < kArraySize; i++)
-		cout << "The element " << i + 1 
-				<< " of array: " << array[i] << endl;
+    double min, max;
+    do {
+        cout << "\nDelete the elements on an interval [a,b]";
+        cout << "\nEnter the number a: ";
+        cin >> min;
+        cout << "Enter the number b (b >= a): ";
+        cin >> max;
+    } while (max < min);
 
-	max_element = array[0];
+    cout << "\nCompressed array:\n";
+    CompressArray(arr, kArraySize, min, max);
+    PrintArray(arr, kArraySize);
 
-	for (unsigned short i = 0; i < kArraySize; i++)
-		if (array[i] > max_element)
-			max_element = array[i];
+    return 0;
+}
 
-	cout << "\nMaximum is " << max_element << endl;
+void PrintArray(double* arr, const unsigned short kArraySize) {
+    for (unsigned short i = 0; i < kArraySize; i++)
+        cout << "The element " << i + 1
+        << " of array: " << arr[i] << endl;
+}
 
-	for (unsigned short i = 0; i < kArraySize; i++)
-		if (array[i] > 0)
-			final_positive = i;
+double FindMaxElement(double* arr, const unsigned short kArraySize) {
+    double max_element = arr[0];
 
-	if (final_positive != -1) {
-		if (final_positive != 0) {
-			for (unsigned short i = 0; i < final_positive; i++)
-				sum += array[i];
-			cout << "\nSum of numbers before last positive one is " << sum << endl;
-		}
-		else {
-			cout << "\nLast positive element is the first one!" << endl;
-		}
-	}
-	else {
-		cout << "There are not the positive numbers!" << endl;
-	}
+    for (unsigned short i = 1; i < kArraySize; i++)
+        if (arr[i] > max_element)
+            max_element = arr[i];
 
-	do {
-		cout << "\nDelete the elements on an interval [a,b]";
-		cout << "\nEnter the number a: ";
-		cin >> min;
-		cout << "Enter the number b (b >= a): ";
-		cin >> max;
-	} while (max < min);
+    return max_element;
+}
 
-	int kept_numbers = kArraySize;
+short FindLastPositive(double* arr, const unsigned short kArraySize) {
+    for (short i = kArraySize - 1; i >= 0; i--)
+        if (arr[i] > 0)
+            return i;
+    return -1;
+}
 
-	for (unsigned short i = 0; i < kept_numbers;) {
-		if ((array[i] >= min) && (array[i] <= max)) {
-			kept_numbers--;
-			for (unsigned short j = i; j < kept_numbers; j++)
-				array[j] = array[j + 1];
-			array[kept_numbers] = 0.0;
-		}
-		else {
-			i++;
-		}
-	}
+void PrintSumBeforeLastPositive(double* arr, const unsigned short kArraySize) {
+    cout << "\nSum of numbers before the last positive is: ";
+    short last_positive = FindLastPositive(arr, kArraySize);
+    if (last_positive != -1) {
+        if (last_positive != 0) {
+            double sum = 0.0;
+            for (unsigned short i = 0; i < last_positive; i++)
+                sum += arr[i];
+            cout << sum << endl;
+        }
+        else {
+            cout << "\nLast positive element is the first one!\n";
+        }
+    }
+    else {
+        cout << "\nThere are no positive numbers!\n";
+    }
+}
 
-	cout << endl;
+void CompressArray(double* arr, const unsigned short kArraySize, double min, double max) {
+    int kept_numbers = kArraySize;
 
-	for (unsigned short i = 0; i < kArraySize; i++) {
-		cout << "The element " << i + 1
-				<< " of compressed array: " << array[i] << endl;
-	}
-
-	return 0;
+    for (unsigned short i = 0; i < kept_numbers;) {
+        if ((arr[i] >= min) && (arr[i] <= max)) {
+            kept_numbers--;
+            for (unsigned short j = i; j < kept_numbers; j++)
+                arr[j] = arr[j + 1];
+            arr[kept_numbers] = 0.0;
+        }
+        else {
+            i++;
+        }
+    }
 }
